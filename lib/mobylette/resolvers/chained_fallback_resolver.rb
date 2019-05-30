@@ -65,7 +65,11 @@ module Mobylette
         query.gsub!(/\:action/, partial)
 
         details.each do |ext, variants|
-          query.gsub!(/\:#{ext}/, "{#{variants.compact.uniq.join(',')}}")
+          if ext == :variants && variants == :any
+            query.gsub!(/:#{ext}/, "*")
+          else
+            query.gsub!(/\:#{ext}/, "{#{variants.compact.uniq.join(',')}}")
+          end
         end
 
         query.gsub!(/\:path/, "#{@paths.compact.uniq.join(',')}")
